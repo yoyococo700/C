@@ -1,4 +1,44 @@
 #include "lib.h"
+#include <string.h>
+#include <stdlib.h>
+
+#define JSON_DATA_LENGHT 2000
+
+struct JSONElement{
+  struct JSONElement* next;
+  char data[JSON_DATA_LENGHT];
+};
+
+
+void printJSONArray(struct JSONElement* head){
+  struct JSONElement* ptr = head;
+  printf("[");
+  while(ptr != NULL) {
+      printf("%s",ptr->data);
+      if (ptr->next != NULL)
+        printf(",");
+      ptr = ptr->next;
+   }
+  printf("]");  
+}
+
+struct JSONElement* addElementJSONArray(struct JSONElement* head, char data[] ){
+  struct JSONElement* newElement =(struct JSONElement*)malloc(sizeof(struct JSONElement));
+  memcpy(newElement->data,data,strlen(data));
+  newElement->next = NULL;
+  
+  //Cas premier de la liste
+  if (head == NULL)
+    return newElement;
+  
+  
+  struct JSONElement* ptr = head;
+   while(ptr->next != NULL) {
+      ptr = ptr->next;
+   }
+   ptr->next = newElement;
+   return head;
+}
 
 int main(int argc, char *argv[]) {
   int i = 0, n = 0;
@@ -6,13 +46,16 @@ int main(int argc, char *argv[]) {
   float total = 0;
   struct classement resultats;
   struct tableau csv = fillTab();
-  i = csv.i;  
   
 
+  i = csv.i;  
+  int nbUESuivi = 0;
+
   int eleve = studentIdToInt(argv[1]);
-  printf("[");
+  printf("{\"data\":[");
   for (int j = 0; j < taille; j++) {
     if (csv.numetu[j] == eleve) {
+      nbUESuivi++;
       int l = 0;
       moyenne += max(csv.note1[j], csv.note2[j]) * csv.coeff[j];
       total += csv.coeff[j] * 100;
@@ -45,16 +88,27 @@ int main(int argc, char *argv[]) {
         }
         l = l + 1;
       }
-      printf("\"Note session 1 /100\":\"%f\",\"Rang\":\"%d\",", csv.note1[j], resultats.classement1[n]);
-      printf("\"Note session 2 /100\":\"%f\",\"Rang\":\"%d\",", csv.note2[j], resultats.classement2[n]);
-      printf("\"Rang global\":\"%d\",", resultats.classement[n]);
-      printf("\"Total\":\"%d\"}", resultats.ntotal[n]);
+      
+      printf("\"noteS1\":\"%f\",\"rangS1\":\"%d\",", csv.note1[j], resultats.classement1[n]);
+      printf("\"noteS2\":\"%f\",\"rangS2\":\"%d\",", csv.note2[j], resultats.classement2[n]);
+      printf("\"RangGlobal\":\"%d\",", resultats.classement[n]);
+      printf("\"total\":\"%d\"}", resultats.ntotal[n]);
       n = n + 1;
-      printf(",");
+      for (int m = j+1; m < taille; m++)
+      {
+        if (csv.numetu[m] == eleve)
+        {
+          printf(",");
+          break;
+        }
+        
+      }
+    
     }
   }
   moyenne *= 20 / total;
-  printf("{\"Votre moyenne /20\":\"%f\"}", moyenne);
-  printf("]");
+  // printf("{\"Votre moyenne /20\":\"%f\"}", moyenne);
+  printf("],\"nbUESuivi\":\"%d\"}",nbUESuivi);
+  
   return 0;
 }
