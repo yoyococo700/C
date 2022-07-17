@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
   struct classement resultats;
   struct tableau csv = fillTab();
   
+  
 
   i = csv.i;  
   int nbUESuivi = 0;
@@ -54,6 +55,9 @@ int main(int argc, char *argv[]) {
   int eleve = studentIdToInt(argv[1]);
   printf("[");
   for (int j = 0; j < taille; j++) {
+    
+    
+
     if (csv.numetu[j] == eleve) {
       nbUESuivi++;
       int l = 0;
@@ -85,14 +89,28 @@ int main(int argc, char *argv[]) {
             resultats.classement2[n] += 1;
           }
           resultats.ntotal[n] += 1;
+
+          if ((int)csv.note2[l]>0){
+              resultats.ntotalS2[n]++;
+          }
+
         }
         l = l + 1;
       }
       
-      printf("\"noteS1\":\"%f\",\"rangS1\":\"%d\",", csv.note1[j], resultats.classement1[n]);
-      printf("\"noteS2\":\"%f\",\"rangS2\":\"%d\",", csv.note2[j], resultats.classement2[n]);
+      printf("\"noteS1\":\"%.3f\",\"rangS1\":\"%d\",", csv.note1[j], resultats.classement1[n]);
+      
+      if ((int)csv.note2[j]>0)
+      {
+        printf("\"noteS2\":\"%.3f\",\"rangS2\":\"%d\",", csv.note2[j], resultats.classement2[n]);
+      }
+      else{
+        printf("\"noteS2\":\"Na\",\"rangS2\":\"Na\",");
+      }
+      
       printf("\"RangGlobal\":\"%d\",", resultats.classement[n]);
-      printf("\"total\":\"%d\"}", resultats.ntotal[n]);
+      printf("\"total\":\"%d\",", resultats.ntotal[n]);
+      printf("\"totalS2\":\"%d\"}", resultats.ntotalS2[n]);
       n = n + 1;
       for (int m = j+1; m < taille; m++)
       {

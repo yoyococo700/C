@@ -20,6 +20,7 @@ struct classement {
   int classement2[nUE];
   int classement[nUE];
   int ntotal[nUE];
+  int ntotalS2[nUE];
 };
 
 float max(float a, float b) { return (a + b + fabs(a - b)) / 2; }
