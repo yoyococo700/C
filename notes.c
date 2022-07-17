@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
   int nbUESuivi = 0;
 
   int eleve = studentIdToInt(argv[1]);
-  printf("{\"data\":[");
+  printf("[");
   for (int j = 0; j < taille; j++) {
     if (csv.numetu[j] == eleve) {
       nbUESuivi++;
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
   }
   moyenne *= 20 / total;
   // printf("{\"Votre moyenne /20\":\"%f\"}", moyenne);
-  printf("],\"nbUESuivi\":\"%d\"}",nbUESuivi);
+  printf("]");
   
   return 0;
 }
