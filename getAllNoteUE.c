@@ -37,7 +37,9 @@ void printnomUE(char UE[8]) {
 void outputJSON(char UE[8], int dataS1[SUB], int dataS2[SUB]) {
     printf("{");
     printnomUE(UE);
-    printf("\"dataS1\":");
+    printf("\"label\":");
+    printLabel();
+    printf(",\"dataS1\":");
     printData(dataS1);
     printf(",\"dataS2\":");
     printData(dataS2);
@@ -78,7 +80,7 @@ int main(int argc, char* argv[]) {
         if (compareUEs(UE, argv[1]))
         {
             dataS1[(int)csv.note1[i] / (100/SUB)] += 1;
-            if ((int)csv.note2[i]!=0)
+            if ((int)csv.note2[i]!=-0)
             {
                 dataS2[(int)csv.note2[i] / (100/SUB)] += 1;
             }
